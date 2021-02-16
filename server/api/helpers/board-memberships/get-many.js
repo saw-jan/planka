@@ -7,6 +7,6 @@ module.exports = {
   },
 
   async fn(inputs) {
-    return BoardMembership.find(inputs.criteria).sort('id');
+    return BoardMembership.find(inputs.criteria).sort('created_at');
   },
 };

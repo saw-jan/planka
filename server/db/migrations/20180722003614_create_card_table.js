@@ -2,12 +2,12 @@ module.exports.up = (knex) =>
   knex.schema.createTable('card', (table) => {
     /* Columns */
 
-    table.bigInteger('id').primary().defaultTo(knex.raw('next_id()'));
+    table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
 
-    table.bigInteger('board_id').notNullable();
-    table.bigInteger('list_id');
-    table.bigInteger('creator_user_id').notNullable();
-    table.bigInteger('cover_attachment_id');
+    table.uuid('board_id').notNullable();
+    table.uuid('list_id');
+    table.uuid('creator_user_id').notNullable();
+    table.uuid('cover_attachment_id');
 
     table.specificType('position', 'double precision');
     table.text('name').notNullable();

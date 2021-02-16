@@ -2,9 +2,9 @@ module.exports.up = (knex) =>
   knex.schema.createTable('board', (table) => {
     /* Columns */
 
-    table.bigInteger('id').primary().defaultTo(knex.raw('next_id()'));
+    table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
 
-    table.bigInteger('project_id').notNullable();
+    table.uuid('project_id').notNullable();
 
     table.text('type').notNullable();
     table.specificType('position', 'double precision').notNullable();

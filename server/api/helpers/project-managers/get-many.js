@@ -7,6 +7,6 @@ module.exports = {
   },
 
   async fn(inputs) {
-    return ProjectManager.find(inputs.criteria).sort('id');
+    return ProjectManager.find(inputs.criteria).sort('created_at');
   },
 };

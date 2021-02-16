@@ -6,7 +6,7 @@ module.exports = {
     },
     sort: {
       type: 'json',
-      defaultsTo: 'id DESC',
+      defaultsTo: 'created_at DESC',
     },
     limit: {
       type: 'number',

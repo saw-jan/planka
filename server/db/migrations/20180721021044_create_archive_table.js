@@ -2,10 +2,10 @@ module.exports.up = (knex) =>
   knex.schema.createTable('archive', (table) => {
     /* Columns */
 
-    table.bigInteger('id').primary().defaultTo(knex.raw('next_id()'));
+    table.string('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
 
     table.text('from_model').notNullable();
-    table.bigInteger('original_record_id').notNullable();
+    table.uuid('original_record_id').notNullable();
     table.json('original_record').notNullable();
 
     table.timestamp('created_at', true);

@@ -10,6 +10,6 @@ module.exports = {
   },
 
   async fn(inputs) {
-    return Action.find(inputs.criteria).sort('id DESC').limit(inputs.limit);
+    return Action.find(inputs.criteria).sort('created_at DESC').limit(inputs.limit);
   },
 };

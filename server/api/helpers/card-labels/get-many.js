@@ -7,6 +7,6 @@ module.exports = {
   },
 
   async fn(inputs) {
-    return CardLabel.find(inputs.criteria).sort('id');
+    return CardLabel.find(inputs.criteria).sort('created_at');
   },
 };

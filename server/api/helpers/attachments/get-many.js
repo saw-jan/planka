@@ -7,6 +7,6 @@ module.exports = {
   },
 
   async fn(inputs) {
-    return Attachment.find(inputs.criteria).sort('id');
+    return Attachment.find(inputs.criteria).sort('created_at');
   },
 };

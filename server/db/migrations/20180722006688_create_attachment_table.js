@@ -2,10 +2,10 @@ module.exports.up = (knex) =>
   knex.schema.createTable('attachment', (table) => {
     /* Columns */
 
-    table.bigInteger('id').primary().defaultTo(knex.raw('next_id()'));
+    table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
 
-    table.bigInteger('card_id').notNullable();
-    table.bigInteger('creator_user_id').notNullable();
+    table.uuid('card_id').notNullable();
+    table.uuid('creator_user_id').notNullable();
 
     table.text('dirname').notNullable();
     table.text('filename').notNullable();
