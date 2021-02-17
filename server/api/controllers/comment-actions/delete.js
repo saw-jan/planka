@@ -24,7 +24,7 @@ module.exports = {
 
     const criteria = {
       id: inputs.id,
-      type: 'commentCard',
+      type: Action.Types.COMMENT_CARD,
     };
 
     if (!currentUser.isAdmin) {

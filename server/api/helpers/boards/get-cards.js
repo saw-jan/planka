@@ -21,9 +21,9 @@ module.exports = {
     if (_.isObjectLike(inputs.recordOrIdOrIds)) {
       criteria.boardId = inputs.recordOrIdOrIds.id;
 
-      if (inputs.recordOrIdOrIds.type === 'kanban') {
+      if (inputs.recordOrIdOrIds.type === Board.Types.KANBAN) {
         sort = 'position';
-      } else if (inputs.recordOrIdOrIds.type === 'collection') {
+      } else if (inputs.recordOrIdOrIds.type === Board.Types.COLLECTION) {
         if (inputs.beforeId) {
           criteria.id = {
             '<': inputs.beforeId,

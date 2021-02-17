@@ -26,19 +26,19 @@ module.exports = {
           return false;
         }
 
-        if (!Project.BACKGROUND_TYPES.includes(value.type)) {
+        if (!Object.values(Project.BackgroundTypes).includes(value.type)) {
           return false;
         }
 
         if (
-          value.type === 'gradient' &&
+          value.type === Project.BackgroundTypes.GRADIENT &&
           _.size(value) === 2 &&
           Project.BACKGROUND_GRADIENTS.includes(value.name)
         ) {
           return true;
         }
 
-        if (value.type === 'image' && _.size(value) === 1) {
+        if (value.type === Project.BackgroundTypes.IMAGE && _.size(value) === 1) {
           return true;
         }
 

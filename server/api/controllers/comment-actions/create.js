@@ -37,7 +37,7 @@ module.exports = {
     }
 
     const values = {
-      type: 'commentCard',
+      type: Action.Types.COMMENT_CARD,
       data: _.pick(inputs, ['text']),
     };
 

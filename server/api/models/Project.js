@@ -5,7 +5,10 @@
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
-const BACKGROUND_TYPES = ['gradient', 'image'];
+const BackgroundTypes = {
+  GRADIENT: 'gradient',
+  IMAGE: 'image',
+};
 
 const BACKGROUND_GRADIENTS = [
   'old-lime',
@@ -36,7 +39,7 @@ const BACKGROUND_GRADIENTS = [
 ];
 
 module.exports = {
-  BACKGROUND_TYPES,
+  BackgroundTypes,
   BACKGROUND_GRADIENTS,
 
   attributes: {

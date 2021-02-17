@@ -13,7 +13,7 @@ module.exports = {
     },
     type: {
       type: 'string',
-      isIn: Board.TYPES,
+      isIn: Object.values(Board.Types),
       required: true,
     },
     position: {

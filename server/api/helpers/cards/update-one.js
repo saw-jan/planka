@@ -67,7 +67,7 @@ module.exports = {
       const board = inputs.nextBoard || inputs.board;
 
       if (inputs.nextList) {
-        if (inputs.board.type === 'kanban' && !inputs.list) {
+        if (inputs.board.type === Board.Types.KANBAN && !inputs.list) {
           throw 'listMustBePresent';
         }
 
@@ -76,8 +76,8 @@ module.exports = {
         }
 
         if (
-          board.type === 'collection' ||
-          (inputs.board.type === 'kanban' && inputs.nextList.id === inputs.list.id)
+          board.type === Board.Types.COLLECTION ||
+          (inputs.board.type === Board.Types.KANBAN && inputs.nextList.id === inputs.list.id)
         ) {
           delete inputs.nextList; // eslint-disable-line no-param-reassign
         } else {
@@ -90,11 +90,11 @@ module.exports = {
           throw 'positionMustBeInValues';
         }
       } else if (inputs.nextBoard) {
-        if (inputs.nextBoard.type === 'kanban') {
+        if (inputs.nextBoard.type === Board.Types.KANBAN) {
           throw 'nextListMustBePresent';
         }
 
-        if (inputs.board.type === 'kanban') {
+        if (inputs.board.type === Board.Types.KANBAN) {
           values.listId = null;
           values.position = null;
         }
@@ -240,7 +240,7 @@ module.exports = {
         // TODO: add transfer action
         await sails.helpers.actions.createOne(
           {
-            type: 'moveCard',
+            type: Action.Types.MOVE_CARD,
             data: {
               fromList: _.pick(inputs.list, ['id', 'name']),
               nextList: _.pick(inputs.nextList, ['id', 'name']),

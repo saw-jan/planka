@@ -29,7 +29,7 @@ module.exports = {
     const path = await sails.helpers.actions
       .getProjectPath({
         id: inputs.id,
-        type: 'commentCard',
+        type: Action.Types.COMMENT_CARD,
         userId: currentUser.id,
       })
       .intercept('pathNotFound', () => Errors.COMMENT_ACTION_NOT_FOUND);

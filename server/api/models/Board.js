@@ -5,10 +5,13 @@
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
-const TYPES = ['kanban', 'collection'];
+const Types = {
+  KANBAN: 'kanban',
+  COLLECTION: 'collection',
+};
 
 module.exports = {
-  TYPES,
+  Types,
 
   attributes: {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗

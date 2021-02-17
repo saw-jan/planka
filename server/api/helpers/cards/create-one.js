@@ -40,7 +40,7 @@ module.exports = {
   async fn(inputs) {
     const { values } = inputs;
 
-    if (inputs.board.type === 'kanban') {
+    if (inputs.board.type === Board.Types.KANBAN) {
       if (!inputs.list) {
         throw 'listMustBePresent';
       }
@@ -79,7 +79,7 @@ module.exports = {
       });
 
       values.position = position;
-    } else if (inputs.board.type === 'collection') {
+    } else if (inputs.board.type === Board.Types.COLLECTION) {
       delete values.position;
     }
 
@@ -114,7 +114,7 @@ module.exports = {
 
     await sails.helpers.actions.createOne(
       {
-        type: 'createCard',
+        type: Action.Types.CREATE_CARD,
         data: {
           list: _.pick(inputs.list, ['id', 'name']),
         },
