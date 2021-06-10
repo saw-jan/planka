@@ -20,10 +20,10 @@ module.exports = {
   async fn(inputs) {
     const criteria = {};
 
-    if (_.every(value, _.isObjectLike)) {
-      criteria.id = sails.helpers.utils.mapRecords(inputs.idOrIds);
-    } else if (_.every(value, _.isString)) {
-      criteria.id = inputs.idOrIds;
+    if (_.every(inputs.recordsOrIds, _.isObjectLike)) {
+      criteria.id = sails.helpers.utils.mapRecords(inputs.recordsOrIds);
+    } else if (_.every(inputs.recordsOrIds, _.isString)) {
+      criteria.id = inputs.recordsOrIds;
     }
 
     if (inputs.user) {

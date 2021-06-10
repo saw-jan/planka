@@ -30,17 +30,24 @@ module.exports = {
       .getProjectPath({
         id: inputs.id,
         type: Action.Types.COMMENT_CARD,
-        userId: currentUser.id,
       })
       .intercept('pathNotFound', () => Errors.COMMENT_ACTION_NOT_FOUND);
 
     let { action } = path;
-    const { board } = path;
+    const { board, project } = path;
 
-    const isBoardMember = await sails.helpers.users.isBoardMember(currentUser.id, board.id);
+    const isProjectManager = await sails.helpers.users.isProjectManager(currentUser.id, project.id);
 
-    if (!isBoardMember) {
-      throw Errors.COMMENT_ACTION_NOT_FOUND; // Forbidden
+    if (!isProjectManager) {
+      if (action.userId !== currentUser.id) {
+        throw Errors.COMMENT_ACTION_NOT_FOUND; // Forbidden
+      }
+
+      const isBoardMember = await sails.helpers.users.isBoardMember(currentUser.id, board.id);
+
+      if (!isBoardMember) {
+        throw Errors.COMMENT_ACTION_NOT_FOUND; // Forbidden
+      }
     }
 
     const values = {

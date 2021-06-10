@@ -22,8 +22,8 @@ module.exports = {
       const boardIds = await sails.helpers.projects.getBoardIds(project.id);
       const boardRooms = boardIds.map((boardId) => `board:${boardId}`);
 
-      const membershipUserIds = await sails.helpers.boards.getMembershipUserIds(boardIds);
-      const userIds = _.union(managerUserIds, membershipUserIds);
+      const memberUserIds = await sails.helpers.boards.getMemberUserIds(boardIds);
+      const userIds = _.union(managerUserIds, memberUserIds);
 
       userIds.forEach((userId) => {
         sails.sockets.removeRoomMembersFromRooms(`user:${userId}`, boardRooms);

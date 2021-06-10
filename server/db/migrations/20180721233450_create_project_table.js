@@ -2,7 +2,7 @@ module.exports.up = (knex) =>
   knex.schema.createTable('project', (table) => {
     /* Columns */
 
-    table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
+    table.bigInteger('id').primary().defaultTo(knex.raw('next_id()'));
 
     table.text('name').notNullable();
     table.jsonb('background');

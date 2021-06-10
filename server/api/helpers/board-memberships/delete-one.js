@@ -4,13 +4,17 @@ module.exports = {
       type: 'ref',
       required: true,
     },
+    project: {
+      type: 'ref',
+      required: true,
+    },
     request: {
       type: 'ref',
     },
   },
 
   async fn(inputs) {
-    const cardIds = await sails.helpers.boards.getCardIds(inputs.record.id);
+    const cardIds = await sails.helpers.boards.getCardIds(inputs.record.boardId);
 
     await CardSubscription.destroy({
       cardId: cardIds,
@@ -25,12 +29,8 @@ module.exports = {
     const boardMembership = await BoardMembership.destroyOne(inputs.record.id);
 
     if (boardMembership) {
-      sails.sockets.broadcast(`user:${boardMembership.userId}`, 'boardMembershipDelete', {
-        item: boardMembership,
-      });
-
       sails.sockets.broadcast(
-        `board:${boardMembership.boardId}`,
+        `user:${boardMembership.userId}`,
         'boardMembershipDelete',
         {
           item: boardMembership,
@@ -38,11 +38,32 @@ module.exports = {
         inputs.request,
       );
 
-      // TODO: also remove if unsubscribed to user
-      sails.sockets.removeRoomMembersFromRooms(
-        `user:${boardMembership.userId}`,
-        `board:${boardMembership.boardId}`,
+      const notifyBoard = () => {
+        sails.sockets.broadcast(
+          `board:${boardMembership.boardId}`,
+          'boardMembershipDelete',
+          {
+            item: boardMembership,
+          },
+          inputs.request,
+        );
+      };
+
+      const isProjectManager = await sails.helpers.users.isProjectManager(
+        inputs.record.userId,
+        inputs.project.id,
       );
+
+      if (isProjectManager) {
+        notifyBoard();
+      } else {
+        // TODO: also remove if unsubscribed to user
+        sails.sockets.removeRoomMembersFromRooms(
+          `user:${boardMembership.userId}`,
+          `board:${boardMembership.boardId}`,
+          notifyBoard,
+        );
+      }
     }
 
     return boardMembership;

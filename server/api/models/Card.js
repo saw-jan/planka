@@ -62,7 +62,7 @@ module.exports = {
       via: 'cardId',
       through: 'CardSubscription',
     },
-    membershipUsers: {
+    memberUsers: {
       collection: 'User',
       via: 'cardId',
       through: 'CardMembership',

@@ -34,7 +34,7 @@ module.exports = {
     const { currentUser } = this.req;
 
     const { board } = await sails.helpers.cards
-      .getProjectPath(inputs.id)
+      .getProjectPath(inputs.cardId)
       .intercept('pathNotFound', () => Errors.CARD_NOT_FOUND);
 
     const isBoardMember = await sails.helpers.users.isBoardMember(currentUser.id, board.id);

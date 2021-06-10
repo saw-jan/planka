@@ -101,7 +101,7 @@ module.exports = {
         }
       }
 
-      const userIds = await sails.helpers.utils.getManagerAndBoardMembershipUserIds(project.id);
+      const userIds = await sails.helpers.projects.getManagerAndBoardMemberUserIds(project.id);
 
       userIds.forEach((userId) => {
         sails.sockets.broadcast(

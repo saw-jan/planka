@@ -2,10 +2,10 @@ module.exports.up = (knex) =>
   knex.schema.createTable('board_membership', (table) => {
     /* Columns */
 
-    table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
+    table.bigInteger('id').primary().defaultTo(knex.raw('next_id()'));
 
-    table.uuid('board_id').notNullable();
-    table.uuid('user_id').notNullable();
+    table.bigInteger('board_id').notNullable();
+    table.bigInteger('user_id').notNullable();
 
     table.timestamp('created_at', true);
     table.timestamp('updated_at', true);

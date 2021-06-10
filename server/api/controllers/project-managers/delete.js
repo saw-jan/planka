@@ -37,6 +37,7 @@ module.exports = {
       throw Errors.PROJECT_MANAGER_NOT_FOUND; // Forbidden
     }
 
+    // TODO: check if the last one
     projectManager = await sails.helpers.projectManagers.deleteOne(projectManager, this.req);
 
     if (!projectManager) {

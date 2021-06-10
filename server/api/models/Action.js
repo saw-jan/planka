@@ -21,7 +21,7 @@ module.exports = {
 
     type: {
       type: 'string',
-      isIn: TYPES,
+      isIn: Object.values(Types),
       required: true,
     },
     data: {

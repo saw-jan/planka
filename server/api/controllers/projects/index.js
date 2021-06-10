@@ -2,8 +2,10 @@ module.exports = {
   async fn() {
     const { currentUser } = this.req;
 
-    const managerProjectIds = await sails.helpers.users.getManagersProjectIds(currentUser.id);
-    const membershipBoardIds = await sails.helpers.users.getMembershipBoardIds(currentUser.id);
+    const managerProjectIds = await sails.helpers.users.getManagerProjectIds(currentUser.id);
+
+    const boardMemberships = await sails.helpers.users.getBoardMemberships(currentUser.id);
+    const membershipBoardIds = await sails.helpers.utils.mapRecords(boardMemberships, 'boardId');
 
     const membershipBoards = await sails.helpers.boards.getMany({
       id: membershipBoardIds,
@@ -12,12 +14,14 @@ module.exports = {
       },
     });
 
-    const membershipProjectIds = sails.helpers.utils.map(membershipBoards, 'projectId', true);
+    const membershipProjectIds = sails.helpers.utils.mapRecords(
+      membershipBoards,
+      'projectId',
+      true,
+    );
 
-    const projects = await sails.helpers.projects.getMany([
-      ...managerProjectIds,
-      ...membershipProjectIds,
-    ]);
+    const projectIds = [...managerProjectIds, ...membershipProjectIds];
+    const projects = await sails.helpers.projects.getMany(projectIds);
 
     const projectManagers = await sails.helpers.projects.getProjectManagers(projectIds);
 
@@ -33,6 +37,7 @@ module.exports = {
         users,
         projectManagers,
         boards,
+        boardMemberships,
       },
     };
   },

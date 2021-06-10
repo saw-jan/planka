@@ -14,6 +14,10 @@ module.exports = {
       userId: inputs.record.id,
     });
 
+    await BoardMembership.destroy({
+      userId: inputs.record.id,
+    });
+
     await CardSubscription.destroy({
       userId: inputs.record.id,
     });
@@ -30,13 +34,16 @@ module.exports = {
     });
 
     if (user) {
-      const projectIds = await sails.helpers.users.getManagerProjectIds(user.id);
+      /* const projectIds = await sails.helpers.users.getManagerProjectIds(user.id);
 
       const userIds = _.union(
         [user.id],
         await sails.helpers.users.getAdminIds(),
-        await sails.helpers.projects.getManagerAndBoardMembershipUserIds(projectIds),
-      );
+        await sails.helpers.projects.getManagerAndBoardMemberUserIds(projectIds),
+      ); */
+
+      const users = await sails.helpers.users.getMany();
+      const userIds = [inputs.record.id, ...sails.helpers.utils.mapRecords(users)];
 
       userIds.forEach((userId) => {
         sails.sockets.broadcast(

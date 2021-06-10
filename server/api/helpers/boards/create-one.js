@@ -35,8 +35,8 @@ module.exports = {
         position: nextPosition,
       });
 
-      const membershipUserIds = await sails.helpers.boards.getMembershipUserIds(id);
-      const userIds = _.union(managerUserIds, membershipUserIds);
+      const memberUserIds = await sails.helpers.boards.getMemberUserIds(id);
+      const userIds = _.union(managerUserIds, memberUserIds);
 
       userIds.forEach((userId) => {
         sails.sockets.broadcast(`user:${userId}`, 'boardUpdate', {

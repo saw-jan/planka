@@ -25,7 +25,7 @@ module.exports = {
       .intercept('E_UNIQUE', 'userAlreadyProjectManager')
       .fetch();
 
-    const userIds = await sails.helpers.projects.getManagerAndBoardMembershipUserIds(
+    const userIds = await sails.helpers.projects.getManagerAndBoardMemberUserIds(
       projectManager.projectId,
     );
 

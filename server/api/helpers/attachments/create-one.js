@@ -15,8 +15,6 @@ module.exports = {
     requestId: {
       type: 'string',
       isNotEmptyString: true,
-      /* allowNull: true,
-      defaultsTo: null, */
     },
     request: {
       type: 'ref',

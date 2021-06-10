@@ -13,7 +13,7 @@ module.exports.routes = {
 
   'GET /api/users': 'users/index',
   'POST /api/users': 'users/create',
-  'GET /api/users/me': 'users/show',
+  'GET /api/users/:id': 'users/show',
   'PATCH /api/users/:id': 'users/update',
   'PATCH /api/users/:id/email': 'users/update-email',
   'PATCH /api/users/:id/password': 'users/update-password',
@@ -23,6 +23,7 @@ module.exports.routes = {
 
   'GET /api/projects': 'projects/index',
   'POST /api/projects': 'projects/create',
+  'GET /api/projects/:id': 'projects/show',
   'PATCH /api/projects/:id': 'projects/update',
   'POST /api/projects/:id/background-image': 'projects/update-background-image',
   'DELETE /api/projects/:id': 'projects/delete',
@@ -71,6 +72,7 @@ module.exports.routes = {
   'DELETE /api/comment-actions/:id': 'comment-actions/delete',
 
   'GET /api/notifications': 'notifications/index',
+  'GET /api/notifications/:id': 'notifications/show',
   'PATCH /api/notifications/:ids': 'notifications/update',
 
   'GET /*': {

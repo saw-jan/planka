@@ -27,7 +27,7 @@ module.exports = {
 
     const { currentUser } = this.req;
 
-    const { board } = await sails.helpers.boards
+    const { board, project } = await sails.helpers.boards
       .getProjectPath(inputs.id)
       .intercept('pathNotFound', () => Errors.BOARD_NOT_FOUND);
 
@@ -36,7 +36,7 @@ module.exports = {
     if (!isBoardMember) {
       const isProjectManager = await sails.helpers.users.isProjectManager(
         currentUser.id,
-        board.projectId,
+        project.id,
       );
 
       if (!isProjectManager) {
@@ -44,17 +44,21 @@ module.exports = {
       }
     }
 
-    const boardMemberships = await sails.helpers.board.getBoardMemberships(board.id);
+    const boardMemberships = await sails.helpers.boards.getBoardMemberships(board.id);
+
+    const userIds = sails.helpers.utils.mapRecords(boardMemberships, 'userId');
+    const users = await sails.helpers.users.getMany(userIds);
+
     const labels = await sails.helpers.boards.getLabels(board.id);
     const lists = await sails.helpers.boards.getLists(board.id);
 
     const cards = await sails.helpers.boards.getCards(board);
     const cardIds = sails.helpers.utils.mapRecords(cards);
 
-    const cardSubscriptions = await sails.helpers.cards.getCardSubscriptionsByUserId(
-      cardIds,
-      currentUser.id,
-    );
+    const cardSubscriptions = await sails.helpers.cardSubscriptions.getMany({
+      cardId: cardIds,
+      userId: currentUser.id,
+    });
 
     const cardMemberships = await sails.helpers.cards.getCardMemberships(cardIds);
     const cardLabels = await sails.helpers.cards.getCardLabels(cardIds);
@@ -78,6 +82,7 @@ module.exports = {
     return {
       item: board,
       included: {
+        users,
         boardMemberships,
         labels,
         lists,
@@ -86,6 +91,7 @@ module.exports = {
         cardLabels,
         tasks,
         attachments,
+        projects: [project],
       },
     };
   },

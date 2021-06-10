@@ -25,9 +25,14 @@ module.exports = {
       .intercept('E_UNIQUE', 'userAlreadyBoardMember')
       .fetch();
 
-    sails.sockets.broadcast(`user:${boardMembership.userId}`, 'boardMembershipCreate', {
-      item: boardMembership,
-    });
+    sails.sockets.broadcast(
+      `user:${boardMembership.userId}`,
+      'boardMembershipCreate',
+      {
+        item: boardMembership,
+      },
+      inputs.request,
+    );
 
     sails.sockets.broadcast(
       `board:${boardMembership.boardId}`,

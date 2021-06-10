@@ -39,15 +39,10 @@ module.exports = {
     const cards = await sails.helpers.boards.getCards(board, inputs.beforeId);
     const cardIds = sails.helpers.utils.mapRecords(cards);
 
-    const cardSubscriptions = await sails.helpers.cards.getCardSubscriptionsByUserId(
-      cardIds,
-      currentUser.id,
-    );
-
-    const cardMemberships = await sails.helpers.cards.getCardMemberships(cardIds);
-    const cardLabels = await sails.helpers.cards.getCardLabels(cardIds);
-    const tasks = await sails.helpers.cards.getTasks(cardIds);
-    const attachments = await sails.helpers.cards.getAttachments(cardIds);
+    const cardSubscriptions = await sails.helpers.cardSubscriptions.getMany({
+      cardId: cardIds,
+      userId: currentUser.id,
+    });
 
     const isSubscribedByCardId = cardSubscriptions.reduce(
       (result, cardSubscription) => ({
@@ -60,6 +55,11 @@ module.exports = {
     cards.forEach((card) => {
       card.isSubscribed = isSubscribedByCardId[card.id] || false; // eslint-disable-line no-param-reassign
     });
+
+    const cardMemberships = await sails.helpers.cards.getCardMemberships(cardIds);
+    const cardLabels = await sails.helpers.cards.getCardLabels(cardIds);
+    const tasks = await sails.helpers.cards.getTasks(cardIds);
+    const attachments = await sails.helpers.cards.getAttachments(cardIds);
 
     return exits.success({
       items: cards,

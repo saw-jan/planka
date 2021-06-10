@@ -62,9 +62,12 @@ module.exports = {
       )
       .fetch();
 
-    const adminUserIds = await sails.helpers.users.getAdminIds();
+    // const userIds = await sails.helpers.users.getAdminIds();
 
-    adminUserIds.forEach((userId) => {
+    const users = await sails.helpers.users.getMany();
+    const userIds = sails.helpers.utils.mapRecords(users);
+
+    userIds.forEach((userId) => {
       sails.sockets.broadcast(
         `user:${userId}`,
         'userCreate',

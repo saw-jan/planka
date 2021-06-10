@@ -7,6 +7,6 @@ module.exports = {
   },
 
   async fn(inputs) {
-    return CardMembership.find(inputs.criteria).sort('created_at');
+    return CardMembership.find(inputs.criteria).sort('id');
   },
 };

@@ -29,13 +29,22 @@ module.exports = {
     let { boardMembership } = path;
     const { project } = path;
 
-    const isProjectManager = await sails.helpers.users.isProjectManager(currentUser.id, project.id);
+    if (boardMembership.userId !== currentUser.id) {
+      const isProjectManager = await sails.helpers.users.isProjectManager(
+        currentUser.id,
+        project.id,
+      );
 
-    if (!isProjectManager) {
-      throw Errors.BOARD_MEMBERSHIP_NOT_FOUND;
+      if (!isProjectManager) {
+        throw Errors.BOARD_MEMBERSHIP_NOT_FOUND;
+      }
     }
 
-    boardMembership = await sails.helpers.boardMemberships.deleteOne(boardMembership, this.req);
+    boardMembership = await sails.helpers.boardMemberships.deleteOne(
+      boardMembership,
+      project,
+      this.req,
+    );
 
     if (!boardMembership) {
       throw Errors.BOARD_MEMBERSHIP_NOT_FOUND;

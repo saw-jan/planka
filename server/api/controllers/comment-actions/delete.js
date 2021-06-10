@@ -22,26 +22,28 @@ module.exports = {
   async fn(inputs) {
     const { currentUser } = this.req;
 
-    const criteria = {
-      id: inputs.id,
-      type: Action.Types.COMMENT_CARD,
-    };
-
-    if (!currentUser.isAdmin) {
-      criteria.userId = currentUser.id;
-    }
-
     const path = await sails.helpers.actions
-      .getProjectPath(criteria)
+      .getProjectPath({
+        id: inputs.id,
+        type: Action.Types.COMMENT_CARD,
+      })
       .intercept('pathNotFound', () => Errors.COMMENT_ACTION_NOT_FOUND);
 
     let { action } = path;
-    const { board } = path;
+    const { board, project } = path;
 
-    const isBoardMember = await sails.helpers.users.isBoardMember(currentUser.id, board.id);
+    const isProjectManager = await sails.helpers.users.isProjectManager(currentUser.id, project.id);
 
-    if (!isBoardMember) {
-      throw Errors.COMMENT_ACTION_NOT_FOUND; // Forbidden
+    if (!isProjectManager) {
+      if (action.userId !== currentUser.id) {
+        throw Errors.COMMENT_ACTION_NOT_FOUND; // Forbidden
+      }
+
+      const isBoardMember = await sails.helpers.users.isBoardMember(currentUser.id, board.id);
+
+      if (!isBoardMember) {
+        throw Errors.COMMENT_ACTION_NOT_FOUND; // Forbidden
+      }
     }
 
     action = await sails.helpers.actions.deleteOne(action, board, this.req);

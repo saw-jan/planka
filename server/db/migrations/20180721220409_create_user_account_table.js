@@ -3,7 +3,7 @@ module.exports.up = (knex) =>
     .createTable('user_account', (table) => {
       /* Columns */
 
-      table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
+      table.bigInteger('id').primary().defaultTo(knex.raw('next_id()'));
 
       table.text('email').notNullable();
       table.text('password').notNullable();

@@ -32,7 +32,14 @@ module.exports = {
 
       try {
         const originalBuffer = await sharp(buffer).jpeg().toBuffer();
-        const cover336Buffer = await sharp(buffer).resize(336, 200).jpeg().toBuffer();
+
+        const cover336Buffer = await sharp(buffer)
+          .resize(336, 200)
+          .jpeg({
+            quality: 100,
+            chromaSubsampling: '4:4:4',
+          })
+          .toBuffer();
 
         const dirname = uuid();
 

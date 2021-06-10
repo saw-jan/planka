@@ -2,9 +2,9 @@ module.exports.up = (knex) =>
   knex.schema.createTable('label', (table) => {
     /* Columns */
 
-    table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
+    table.bigInteger('id').primary().defaultTo(knex.raw('next_id()'));
 
-    table.uuid('board_id').notNullable();
+    table.bigInteger('board_id').notNullable();
 
     table.text('name');
     table.text('color').notNullable();

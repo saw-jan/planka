@@ -7,6 +7,6 @@ module.exports = {
   },
 
   async fn(inputs) {
-    return Notification.find(inputs.criteria).sort('created_at DESC');
+    return Notification.find(inputs.criteria).sort('id DESC');
   },
 };

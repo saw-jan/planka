@@ -106,10 +106,10 @@ module.exports = {
     }
 
     if (!_.isNil(values.position)) {
-      const cards = await sails.helpers.lists.getCards(
-        values.listId || inputs.record.listId,
-        inputs.record.id,
-      );
+      const boardId = values.boardId || inputs.record.boardId;
+      const listId = values.listId || inputs.record.listId;
+
+      const cards = await sails.helpers.lists.getCards(listId, inputs.record.id);
 
       const { position, repositions } = sails.helpers.utils.insertToPositionables(
         values.position,
@@ -124,7 +124,7 @@ module.exports = {
           position: nextPosition,
         });
 
-        sails.sockets.broadcast(`board:${values.boardId || inputs.record.boardId}`, 'cardUpdate', {
+        sails.sockets.broadcast(`board:${boardId}`, 'cardUpdate', {
           item: {
             id,
             position: nextPosition,
@@ -140,21 +140,19 @@ module.exports = {
       let prevLabels;
       if (inputs.nextBoard) {
         if (inputs.nextBoard.projectId !== inputs.board.projectId) {
-          const membershipUserIds = await sails.helpers.boards.getMembershipUserIds(
-            inputs.nextBoard.id,
-          );
+          const memberUserIds = await sails.helpers.boards.getMemberUserIds(inputs.nextBoard.id);
 
           await CardSubscription.destroy({
             cardId: inputs.record.id,
             userId: {
-              '!=': membershipUserIds,
+              '!=': memberUserIds,
             },
           });
 
           await CardMembership.destroy({
             cardId: inputs.record.id,
             userId: {
-              '!=': membershipUserIds,
+              '!=': memberUserIds,
             },
           });
         }
@@ -173,15 +171,6 @@ module.exports = {
       }
 
       if (inputs.nextBoard) {
-        sails.sockets.broadcast(
-          `board:${inputs.board.id}`,
-          'cardDelete',
-          {
-            item: inputs.record,
-          },
-          inputs.request,
-        );
-
         const labels = await sails.helpers.boards.getLabels(card.boardId);
         const labelByNameMap = _.keyBy(labels, 'name');
 
@@ -211,7 +200,7 @@ module.exports = {
           ),
         );
 
-        sails.sockets.broadcast(`board:${card.boardId}`, 'cardCreate', {
+        sails.sockets.broadcast(`board:${card.boardId}`, 'cardUpdate', {
           item: card,
         });
 
@@ -243,7 +232,7 @@ module.exports = {
             type: Action.Types.MOVE_CARD,
             data: {
               fromList: _.pick(inputs.list, ['id', 'name']),
-              nextList: _.pick(inputs.nextList, ['id', 'name']),
+              toList: _.pick(inputs.nextList, ['id', 'name']),
             },
           },
           inputs.user,

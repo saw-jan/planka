@@ -20,7 +20,7 @@ module.exports = {
 
     type: {
       type: 'string',
-      isIn: TYPES,
+      isIn: Object.values(Types),
       required: true,
     },
     position: {
@@ -45,7 +45,7 @@ module.exports = {
       required: true,
       columnName: 'project_id',
     },
-    membershipUsers: {
+    memberUsers: {
       collection: 'User',
       via: 'boardId',
       through: 'BoardMembership',

@@ -8,7 +8,7 @@ module.exports = {
   },
 
   async fn(inputs) {
-    const boardMemberships = sails.helpers.users.getBoardMemberships(inputs.idOrIds);
+    const boardMemberships = await sails.helpers.users.getBoardMemberships(inputs.idOrIds);
 
     return sails.helpers.utils.mapRecords(boardMemberships, 'boardId', _.isArray(inputs.idOrIds));
   },

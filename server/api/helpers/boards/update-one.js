@@ -25,7 +25,7 @@ module.exports = {
   },
 
   async fn(inputs) {
-    const userIds = await sails.helpers.projects.getManagerAndBoardMembershipUserIds(
+    const userIds = await sails.helpers.projects.getManagerAndBoardMemberUserIds(
       inputs.record.projectId,
     );
 

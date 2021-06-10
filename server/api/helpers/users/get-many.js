@@ -23,6 +23,6 @@ module.exports = {
       criteria.deletedAt = null;
     }
 
-    return User.find(criteria).sort('created_at');
+    return User.find(criteria).sort('id');
   },
 };

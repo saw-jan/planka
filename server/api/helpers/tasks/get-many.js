@@ -7,6 +7,6 @@ module.exports = {
   },
 
   async fn(inputs) {
-    return Task.find(inputs.criteria).sort('created_at');
+    return Task.find(inputs.criteria).sort('id');
   },
 };
