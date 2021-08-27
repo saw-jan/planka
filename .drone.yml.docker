@@ -13,8 +13,6 @@ steps:
     environment:
       REACT_APP_SERVER_BASE_URL: http://planka-server:1337
     commands:
-      - pwd
-      - mkdir /drone/src/123Folder
       - cd client
       - npm i
       - npm start
@@ -25,20 +23,16 @@ steps:
     environment:
       DATABASE_URL: postgresql://postgres@postgres/planka
     commands:
-      - pwd
-      - ls
       - cd server
       - npm i
       - npm run db:init
       - npm start
 
-  - name: wait-for-servers
-    image: 'curlimages/curl'
+  - name: wait-for-server
+    image: 'owncloudci/wait-for:latest'
     commands:
-      - pwd
-      - ls
-      - until curl -s http://planka-web:3000/login; do sleep 5; done
-      - until curl -s http://planka-server:1337; do sleep 5; done
+      - wait-for -it planka-web:3000 -t 600
+      - wait-for -it planka-server:1337 -t 600
 
   - name: ui-tests
     image: node:14-alpine3.14
@@ -47,11 +41,9 @@ steps:
       LAUNCH_URL: 'http://planka-web:3000'
       API_SERVER_URL: 'http://planka-server:1337/api'
     commands:
-      - pwd
-      - ls
       - cd client
       - npm i
-      - npm run test:webui tests/acceptance/features/webUIDashboard/dashboard.feature
+      - npm run test:webui tests/acceptance/features/webUIDashboard/dashboard.feature:12
 
 services:
   - name: postgres

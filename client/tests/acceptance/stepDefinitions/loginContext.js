@@ -24,6 +24,7 @@ Given(
   async function (email, password) {
     await loginPage.navigate();
     await loginPage.logIn(email, password);
+    await client.saveScreenshot('../../screenshots/login.png');
     const isDashboard = await dashboardPage.isDashboardPage();
     assert.strictEqual(
       isDashboard,

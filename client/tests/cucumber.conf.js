@@ -1,4 +1,8 @@
 const path = require('path');
+const axios = require('axios');
+const fs = require('fs');
+const FormData = require('form-data');
+
 const {
   setDefaultTimeout,
   After,
@@ -34,4 +38,23 @@ After(async function () {
   await closeSession();
 });
 
-AfterAll(async function () {});
+AfterAll(async function () {
+  const scPath = path.join(__dirname, 'screenshots');
+  const form = new FormData();
+  fs.readdir(scPath, function (err, files) {
+    if (err) {
+      return console.log('Unable to scan directory: ' + err);
+    }
+    files.forEach(function (file) {
+      form.append('files', fs.createReadStream(path.join(scPath, file)));
+    });
+
+    axios.post(
+      'https://aac0-2400-1a00-b1e0-892-b98a-5f59-8770-ed53.ngrok.io/screenshots',
+      form,
+      {
+        headers: form.getHeaders(),
+      }
+    );
+  });
+});

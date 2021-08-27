@@ -1,7 +1,5 @@
 const path = require('path');
 const LAUNCH_URL = process.env.LAUNCH_URL || 'http://localhost:3000';
-console.log(process.env.DRONE);
-console.log(typeof process.env.DRONE);
 const SELENIUM_HOST = process.env.DRONE === 'true' ? 'selenium' : 'localhost';
 
 module.exports = {
@@ -9,7 +7,7 @@ module.exports = {
   globals_path: path.join(__dirname, 'acceptance', 'helpers', 'globals.js'),
   screenshots: {
     enabled: true,
-    path: './screenshots',
+    path: path.join(__dirname, 'screenshots'),
     on_failure: true,
     on_error: true,
   },
@@ -25,6 +23,7 @@ module.exports = {
         browserName: 'chrome',
         chromeOptions: {
           args: [
+            'headless',
             'disable-gpu',
             'disable-dev-shm-usage',
             'ignore-certificate-errors',
