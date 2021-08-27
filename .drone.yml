@@ -7,24 +7,45 @@ platform:
   arch: amd64
 
 steps:
-  - name: planka
-    image: node/12.22-alpine3.14
+  - name: planka-web
+    image: node:14-alpine3.14
+    detach: true
+    commands:
+      - cd client
+      - npm i
+      - npm start
+
+  - name: planka-server
+    image: node:14-alpine3.14
+    detach: true
     environment:
       DATABASE_URL: postgresql://postgres@postgres/planka
-      DRONE: true
-      LAUNCH_URL: 'http://planka:3000'
     commands:
+      - cd server
       - npm i
-      - npm run server:db:init
-      - npm start &
-      - until curl -s http://planka:3000; do sleep 5; done
-      - until curl -s http://planka:1337; do sleep 5; done
+      - npm run db:init
+      - npm start
+
+  - name: wait-for-server
+    image: 'owncloudci/wait-for:latest'
+    commands:
+      - wait-for -it planka-web:3000 -t 600
+      - wait-for -it planka-server:1337 -t 600
+
+  - name: ui-tests
+    image: node:14-alpine3.14
+    environment:
+      DRONE: true
+      LAUNCH_URL: 'http://planka-web:3000'
+      API_SERVER_URL: 'http://planka-server:1337/api'
+    commands:
       - cd client
-      - npm run test:webui tests/acceptance/features
+      - npm i
+      - npm run test:webui tests/acceptance/features/webUIDashboard/dashboard.feature:12
 
 services:
   - name: postgres
-    image: postgres
+    image: postgres:alpine
     environment:
       POSTGRES_DB: planka
       POSTGRES_HOST_AUTH_METHOD: trust
@@ -34,4 +55,4 @@ services:
 
 trigger:
   branch:
-    - master
+    - ci
